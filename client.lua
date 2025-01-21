@@ -70,3 +70,31 @@ function OpenPackMenu()
         menu.close()
     end)
 end
+
+function DrawText3D(x, y, z, text, scale, color)
+    SetTextScale(scale, scale)
+    SetTextFont(0)
+    SetTextProportional(1)
+    SetTextColour(color[1], color[2], color[3], color[4])
+    SetTextEntry("STRING")
+    SetTextCentre(1)
+    AddTextComponentString(text)
+    SetDrawOrigin(x, y, z, 0)
+    DrawText(0.0, 0.0)
+    ClearDrawOrigin()
+end
+
+Citizen.CreateThread(function()
+    local npc = Config.NPC
+
+    while true do
+        Citizen.Wait(0)
+        local playerCoords = GetEntityCoords(PlayerPedId())
+        local dist = #(playerCoords - vector3(npc.coords.x, npc.coords.y, npc.coords.z))
+
+        -- Display the text only if the player is within 5 meters
+        if dist < 5.0 then
+            DrawText3D(npc.coords.x, npc.coords.y, npc.coords.z + 1.0, "Starter Pack", 0.35, {0, 255, 255, 255})
+        end
+    end
+end)
